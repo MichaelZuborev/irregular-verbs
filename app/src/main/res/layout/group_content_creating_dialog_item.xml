@@ -76,6 +76,7 @@
         android:layout_gravity="center"
         android:layout_weight="1"
         android:clickable="false"
-        android:focusable="false"/>
+        android:focusable="false"
+        android:theme="@style/AppTheme"/>
 
 </LinearLayout>

@@ -18,7 +18,8 @@
         android:layout_margin="16dp"
         app:layout_anchor="@+id/group_content_crating_screen_listview"
         app:layout_anchorGravity="right|bottom"
-        app:srcCompat="@drawable/ic_add_white_36dp"
-        android:visibility="invisible"/>
+        app:srcCompat="@drawable/ic_check_white_24dp"
+        android:visibility="invisible"
+        android:theme="@style/AppTheme"/>
 
 </android.support.design.widget.CoordinatorLayout>
