@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="horizontal">
+
+
+    <Button
+        android:id="@+id/group_list_no_btn"
+        style="@style/Widget.AppCompat.ButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"
+        android:onClick="onButtonClickListener"
+        android:text="@string/cancel_btn"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/group_list_delete_btn"
+        style="@style/Widget.AppCompat.ButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"
+        android:onClick="onButtonClickListener"
+        android:text="@string/delete_btn"
+        android:textSize="20sp" />
+
+
+</LinearLayout>
+
+
+
+

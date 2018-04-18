@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="list_view_main_word">16sp</dimen>
+    <dimen name="list_view_second_words">14sp</dimen>
+    <dimen name="list_margin_word">5dp</dimen>
+    <dimen name="list_margin_layout">5dp</dimen>
+</resources>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/list_margin_layout"
+    android:layout_weight="1"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/verbListMainVerb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/list_margin_word"
+        android:layout_marginTop="@dimen/list_margin_word"
+        android:layout_weight="0.9"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="@dimen/list_view_main_word" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/verbListFirstForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginBottom="1dp"
+            android:text="TextView"
+            android:textSize="@dimen/list_view_second_words" />
+
+        <TextView
+            android:id="@+id/verbListSecondForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginBottom="1dp"
+            android:text="TextView"
+            android:textSize="@dimen/list_view_second_words" />
+
+        <TextView
+            android:id="@+id/verbListThirdForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginBottom="1dp"
+            android:text="TextView"
+            android:textSize="@dimen/list_view_second_words" />
+    </LinearLayout>
+
+</LinearLayout>

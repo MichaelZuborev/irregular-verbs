@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">IrregularVerbsNew</string>
+    <string name="quiz_btn">Start test</string>
+    <string name="groups_btn">Groups</string>
+    <string name="verbs_btn">All verbs</string>
+    <string name="groupCreationHint">Your new group</string>
+    <string name="cancel_btn">Cancel</string>
+    <string name="create_btn">Create</string>
+    <string name="delete_btn">Delete</string>
+    <string name="delete_group_question">Delete this group?</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="HiddenHintVerb">-</string>
+    <string name="test_is_finished">Test is finished!</string>
+    <string name="finish">Finish</string>
+    <string name="do_you_want_to_delete_verb">Do you want to delete verb?</string>
+</resources>
