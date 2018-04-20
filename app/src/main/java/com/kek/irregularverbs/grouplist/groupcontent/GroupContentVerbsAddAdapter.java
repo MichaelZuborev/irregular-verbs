@@ -19,7 +19,7 @@ import java.util.List;
 
 public class GroupContentVerbsAddAdapter extends BaseAdapter implements CompoundButton.OnCheckedChangeListener {
     private static final String GROUP_CONTENT_VERBS_ADAPTER = "groupContVerbsAdapter";
-    private static final int DB_SIZE = 100;
+    private static final int DB_SIZE = 263;
 
     private List<GroupVerbsDialogItem> mItemList;
     private LayoutInflater mLayoutInflater;

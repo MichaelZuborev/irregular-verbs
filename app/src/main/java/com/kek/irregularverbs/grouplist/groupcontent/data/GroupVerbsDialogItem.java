@@ -46,7 +46,7 @@ public class GroupVerbsDialogItem {
         SQLiteDatabase database = dbHelper.getReadableDatabase();
         Cursor cursor = dbHelper.getCursor(mId);
 
-        Log.d(GROUP_ITEM_LOG, "creation of cursor and DB succeed. Initialisation of verbs");
+        Log.d(GROUP_ITEM_LOG, "creation of cursor and DB succeed. Initialisation of verbs. Id is " + mId);
 
         mMainVerb = cursor.getString(1);
         mFirstForm = cursor.getString(2);

@@ -22,7 +22,7 @@ import java.util.List;
 
 public class VerbListAdapter extends BaseAdapter {
     private static final String VERBLIST_ADAPTER = "verbListAdapter";
-    private static final int DB_SIZE = 100;
+    private static final int DB_SIZE = 263;
 
     private List<VerbListItem> mItemList;
     private LayoutInflater mLayoutInflater;

@@ -98,7 +98,7 @@ public class Group {
             InputStreamReader inputRead = new InputStreamReader(fileInStream);
             Log.d(GROUP_LOG, "input stream has been successfully created & initialised. File name is: " + mGroupName);
 
-            char[] inputResult = new char[500];
+            char[] inputResult = new char[1000];
             inputRead.read(inputResult);
             Log.d(GROUP_LOG, "content has been loaded.");
 
