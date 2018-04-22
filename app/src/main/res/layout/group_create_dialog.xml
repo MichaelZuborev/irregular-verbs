@@ -23,7 +23,7 @@
             android:layout_marginBottom="10dp"
             android:ems="12"
             android:hint="@string/groupCreationHint"
-            android:inputType="text"
+            android:inputType="textFilter"
             android:theme="@style/AppTheme"/>
     </android.support.design.widget.TextInputLayout>
 

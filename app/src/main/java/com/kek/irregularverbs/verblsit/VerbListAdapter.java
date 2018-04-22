@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -21,11 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VerbListAdapter extends BaseAdapter {
+
     private static final String VERBLIST_ADAPTER = "verbListAdapter";
     private static final int DB_SIZE = 263;
 
     private List<VerbListItem> mItemList;
     private LayoutInflater mLayoutInflater;
+
 
     public VerbListAdapter(Context context) {
         mItemList = new ArrayList<>();
@@ -76,6 +77,11 @@ public class VerbListAdapter extends BaseAdapter {
         mFirstForm.setText(mItem.getFirstForm());
         mSecondForm.setText(mItem.getSecondForm());
         mThirdForm.setText(mItem.getThirdForm());
+
+        mMainVerb.setTextColor(mResultView.getResources().getColor(R.color.BLACK_SOFT));
+        mFirstForm.setTextColor(mResultView.getResources().getColor(R.color.BLACK_SOFT));
+        mSecondForm.setTextColor(mResultView.getResources().getColor(R.color.BLACK_SOFT));
+        mThirdForm.setTextColor(mResultView.getResources().getColor(R.color.BLACK_SOFT));
 
         Log.d(VERBLIST_ADAPTER, "text has been set");
 

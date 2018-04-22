@@ -1,10 +1,15 @@
 package com.kek.irregularverbs.grouplist;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -17,16 +22,21 @@ import android.widget.ListView;
 import com.kek.irregularverbs.R;
 import com.kek.irregularverbs.grouplist.groupcontent.GroupContentFragment;
 
+import java.lang.ref.WeakReference;
+
 import static android.app.Activity.RESULT_OK;
 
 
-public class GroupListFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class GroupListFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks{
 
     private static final String GROUPLISTFRAGMENT_LOG = "groupListFragment";
 
     private long mCashID;
 
     private GroupListDataManager mManager;
+    private AsyncTaskLoader mAsyncTaskLoader;
+    private LoaderManager mLoaderManager;
+    private WeakReference mWeakContext;
 
     //Cash view
     private View mView;
@@ -39,8 +49,19 @@ public class GroupListFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mView = view;
-        loadDataManager();
+        mWeakContext = new WeakReference(getContext());
 
+        //loading data in loader manager
+        mLoaderManager = getLoaderManager();
+        Loader mLoader = mLoaderManager.getLoader(0);
+
+        if (mLoader == null) {
+            mLoaderManager.initLoader(0, null, this);
+        } else {
+            mLoaderManager.restartLoader(0, null, this);
+        }
+
+        mLoaderManager.getLoader(0).forceLoad();
 
         FloatingActionButton mAddBtn = view.findViewById(R.id.add_group_btn);
         mAddBtn.setOnClickListener(this);
@@ -48,6 +69,8 @@ public class GroupListFragment extends Fragment implements View.OnClickListener,
         GroupListActivity.mGroupName = null;
 
         getActivity().setTitle("Your groups");
+
+
     }
 
     @Override
@@ -60,11 +83,47 @@ public class GroupListFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        mAsyncTaskLoader = new AsyncTaskLoader<String>(getContext()) {
+            @Override
+            public String loadInBackground() {
+                Log.d(GROUPLISTFRAGMENT_LOG, "Loading the data manager");
+                if(mWeakContext != null) {
+                    mManager = new GroupListDataManager((Context) mWeakContext.get());
+                }else {
+                    Log.e(GROUPLISTFRAGMENT_LOG, "Failed to load weak reference");
+                }
+                return null;
+            }
+        };
+        return mAsyncTaskLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, Object data) {
+        Log.d(GROUPLISTFRAGMENT_LOG, "Setting adapter to container");
+        ListView mContainer = mView.findViewById(R.id.group_list_container);
+        mContainer.setAdapter(mManager.getAdapter());
+        Log.d(GROUPLISTFRAGMENT_LOG, "Adapter has been set");
+        registerForContextMenu(mContainer);
+
+        mContainer.setOnItemClickListener(this);
+
+        Log.d(GROUPLISTFRAGMENT_LOG, "data has been loaded");
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+
+    }
+
     //load old or updated data
     private void loadDataManager() {
         Log.d(GROUPLISTFRAGMENT_LOG, "Loading the data manager");
         mManager = new GroupListDataManager(getActivity());
-        Log.d(GROUPLISTFRAGMENT_LOG, "Adapter has been created. Setting adapter to container");
+        Log.d(GROUPLISTFRAGMENT_LOG, "Manager has been created. Setting adapter to container");
         ListView mContainer = mView.findViewById(R.id.group_list_container);
         mContainer.setAdapter(mManager.getAdapter());
         Log.d(GROUPLISTFRAGMENT_LOG, "Adapter has been set");
@@ -140,5 +199,12 @@ public class GroupListFragment extends Fragment implements View.OnClickListener,
         ft.addToBackStack(null);
         ft.commit();
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mAsyncTaskLoader.cancelLoad();
     }
 }

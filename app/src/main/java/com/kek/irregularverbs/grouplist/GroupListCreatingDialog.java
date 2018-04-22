@@ -3,6 +3,8 @@ package com.kek.irregularverbs.grouplist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -15,14 +17,30 @@ public class GroupListCreatingDialog extends AppCompatActivity {
 
     EditText editText;
 
+    private String mBlockCharacterSet = "~#^|$%&*!/";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.group_create_dialog);
         editText = findViewById(R.id.group_list_dialog_input);
+        editText.setFilters(new InputFilter[] { filter });
 
-        setTitle("Create group");
+        setTitle("Create a group");
     }
+
+    private InputFilter filter = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            if (source != null && mBlockCharacterSet.contains(("" + source))) {
+                return "";
+            }
+            return null;
+        }
+    };
 
     public void onButtonClickListener(View v) {
         switch (v.getId()) {

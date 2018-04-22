@@ -1,10 +1,15 @@
 package com.kek.irregularverbs.practice;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +20,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kek.irregularverbs.R;
+import com.kek.irregularverbs.grouplist.GroupListDataManager;
 
-public class PracticeGroupListFragment extends Fragment implements AdapterView.OnItemClickListener {
+import java.lang.ref.WeakReference;
+
+public class PracticeGroupListFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks {
 
     private static final String PRACTICEGROUPLISTFRAGMENT = "PracticeGroupListFrag";
 
     private PracticeGroupListDataManager mManager;
+    private AsyncTaskLoader mAsyncTaskLoader;
+    private LoaderManager mLoaderManager;
+    private WeakReference mWeakContext;
 
     //Cash view
     private View mView;
@@ -34,7 +45,19 @@ public class PracticeGroupListFragment extends Fragment implements AdapterView.O
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mView = view;
 
-        loadDataManager();
+        mWeakContext = new WeakReference(getContext());
+
+        //loading data in loader manager
+        mLoaderManager = getLoaderManager();
+        Loader mLoader = mLoaderManager.getLoader(0);
+
+        if (mLoader == null) {
+            mLoaderManager.initLoader(0, null, this);
+        } else {
+            mLoaderManager.restartLoader(0, null, this);
+        }
+
+        mLoaderManager.getLoader(0).forceLoad();
 
         getActivity().setTitle("Choose a group");
     }
@@ -71,5 +94,47 @@ public class PracticeGroupListFragment extends Fragment implements AdapterView.O
             }
 
         }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        mAsyncTaskLoader = new AsyncTaskLoader<String>(getContext()) {
+            @Override
+            public String loadInBackground() {
+                if(mWeakContext != null) {
+                    Log.d(PRACTICEGROUPLISTFRAGMENT, "Loading the data manager");
+                    mManager = new PracticeGroupListDataManager(getActivity());
+                }else {
+                    Log.e(PRACTICEGROUPLISTFRAGMENT, "Failed to load weak reference");
+                }
+                return null;
+            }
+        };
+        return mAsyncTaskLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, Object data) {
+        Log.d(PRACTICEGROUPLISTFRAGMENT, "Adapter has been created. Setting adapter to container");
+        ListView mContainer = mView.findViewById(R.id.practice_group_list_container);
+        mContainer.setAdapter(mManager.getAdapter());
+        Log.d(PRACTICEGROUPLISTFRAGMENT, "Adapter has been set");
+
+        mContainer.setOnItemClickListener(this);
+
+        Log.d(PRACTICEGROUPLISTFRAGMENT, "data has been loaded");
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mAsyncTaskLoader.cancelLoad();
     }
 }

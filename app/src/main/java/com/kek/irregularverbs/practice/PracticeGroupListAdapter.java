@@ -69,6 +69,9 @@ public class PracticeGroupListAdapter extends BaseAdapter {
 
         groupName.setText(currentGroup.getGroupName());
         groupSize.setText(mGroupSize);
+        groupName.setTextColor(resultView.getResources().getColor(R.color.BLACK_SOFT));
+        groupSize.setTextColor(resultView.getResources().getColor(R.color.BLACK_SOFT));
+
         Log.d(PRACTICE_GROUP_LIST_ADAPTER, "text has been set");
 
         return resultView;

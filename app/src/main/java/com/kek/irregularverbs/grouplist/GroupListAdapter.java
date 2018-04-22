@@ -46,16 +46,16 @@ public class GroupListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View resultView;
+        View mResultView;
         if (convertView != null) {
-            resultView = convertView;
+            mResultView = convertView;
         } else {
-            resultView = layInflater.inflate(resource, parent, false);
+            mResultView = layInflater.inflate(resource, parent, false);
         }
         Group currentGroup = groupList.get(position);
 
-        TextView groupName = resultView.findViewById(R.id.group_name);
-        TextView groupSize = resultView.findViewById(R.id.group_size);
+        TextView groupName = mResultView.findViewById(R.id.group_name);
+        TextView groupSize = mResultView.findViewById(R.id.group_size);
         Log.d(GROUP_LIST_ADAPTER, "views have been found");
 
         String mGroupSize;
@@ -67,9 +67,11 @@ public class GroupListAdapter extends BaseAdapter {
 
         groupName.setText(currentGroup.getGroupName());
         groupSize.setText(mGroupSize);
+        groupName.setTextColor(mResultView.getResources().getColor(R.color.BLACK_SOFT));
+        groupSize.setTextColor(mResultView.getResources().getColor(R.color.BLACK_SOFT));
         Log.d(GROUP_LIST_ADAPTER, "text has been set");
 
-        return resultView;
+        return mResultView;
     }
 
     public List<Group> getGroups() {

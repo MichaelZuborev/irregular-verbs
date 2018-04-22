@@ -37,8 +37,6 @@ public class GroupListDataManager {
         } catch (IOException e) {
             Log.d(GROUP_LIST_MANAGER, "constructor: data hasn't been loaded. Exception at constructor: " + e);
             e.printStackTrace();
-            Toast.makeText(context, "No groups found", Toast.LENGTH_SHORT).show();
-
         }
     }
 

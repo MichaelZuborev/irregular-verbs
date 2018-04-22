@@ -37,10 +37,8 @@ public class GroupContentDataManager {
 
             Log.d(GROUP_CONTENT_MANAGER, "constructor: data has been successfully loaded");
         } catch (IOException e) {
-            Log.d(GROUP_CONTENT_MANAGER, "constructor: data hasn't been loaded. Exception at constructor: " + e);
+            Log.e(GROUP_CONTENT_MANAGER, "constructor: data hasn't been loaded. Exception at constructor: " + e);
             e.printStackTrace();
-            Toast.makeText(context, "No words found", Toast.LENGTH_SHORT).show();
-
         }
     }
 

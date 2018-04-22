@@ -1,12 +1,15 @@
 package com.kek.irregularverbs.grouplist.groupcontent;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.ContextMenu;
@@ -19,17 +22,24 @@ import android.widget.ListView;
 
 import com.kek.irregularverbs.R;
 import com.kek.irregularverbs.grouplist.GroupListActivity;
+import com.kek.irregularverbs.grouplist.GroupListDataManager;
 import com.kek.irregularverbs.grouplist.data.Group;
 import com.kek.irregularverbs.grouplist.groupcontent.data.GroupVerbsDialogItem;
+
+import java.lang.ref.WeakReference;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class GroupContentFragment extends Fragment {
+public class GroupContentFragment extends Fragment implements LoaderManager.LoaderCallbacks {
 
     private String mName;
-    private GroupContentDataManager mManager;
+    private GroupContentDataManager mDataManager;
     private long mCashID;
+
+    private AsyncTaskLoader mAsyncTaskLoader;
+    private LoaderManager mLoaderManager;
+    private WeakReference mWeakContext;
 
     private final static String GROUPCONTENTFRAGMENT_LOG = "GroupContentFragment";
 
@@ -53,7 +63,19 @@ public class GroupContentFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        loadDataManager();
+        mWeakContext = new WeakReference(getContext());
+
+        //load data in loaderManager
+        mLoaderManager = getLoaderManager();
+        Loader mLoader = mLoaderManager.getLoader(0);
+
+        if (mLoader == null) {
+            mLoaderManager.initLoader(0, null, this);
+        } else {
+            mLoaderManager.restartLoader(0, null, this);
+        }
+
+        mLoaderManager.getLoader(0).forceLoad();
 
         Log.d(GROUPCONTENTFRAGMENT_LOG, "manager loaded");
 
@@ -64,7 +86,7 @@ public class GroupContentFragment extends Fragment {
                 Intent intent = new Intent(getContext(), GroupContentDialogCreating.class);
 
                 StringBuilder cash = new StringBuilder();
-                SparseArray<GroupVerbsDialogItem> items = mManager.getAdapter().getItemArray();
+                SparseArray<GroupVerbsDialogItem> items = mDataManager.getAdapter().getItemArray();
 
                 Log.d(GROUPCONTENTFRAGMENT_LOG, "fab: list has been initialized");
                 for (int i = 0; i < items.size(); i++) {
@@ -80,13 +102,46 @@ public class GroupContentFragment extends Fragment {
         });
     }
 
+    @SuppressLint("StaticFieldLeak")
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        mAsyncTaskLoader = new AsyncTaskLoader<String>(getContext()) {
+            @Override
+            public String loadInBackground() {
+                Log.d(GROUPCONTENTFRAGMENT_LOG, "loadManager start");
+
+                if(mWeakContext != null){
+                mDataManager = new GroupContentDataManager((Context) mWeakContext.get(), new Group((Context) mWeakContext.get(), mName));
+                }else {
+                    Log.e(GROUPCONTENTFRAGMENT_LOG, "Failed to get weak reference");
+                }
+                return null;
+            }
+        };
+        return mAsyncTaskLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, Object data) {
+        ListView view = getView().findViewById(R.id.group_content_container);
+        view.setAdapter(mDataManager.getAdapter());
+        registerForContextMenu(view);
+
+        Log.d(GROUPCONTENTFRAGMENT_LOG, "loadManager completed");
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+
+    }
+
     //load old or updated data
     private void loadDataManager() {
         Log.d(GROUPCONTENTFRAGMENT_LOG, "loadManager start");
 
-        mManager = new GroupContentDataManager(getContext(), new Group(getContext(), mName));
+        mDataManager = new GroupContentDataManager(getContext(), new Group(getContext(), mName));
         ListView view = getView().findViewById(R.id.group_content_container);
-        view.setAdapter(mManager.getAdapter());
+        view.setAdapter(mDataManager.getAdapter());
         registerForContextMenu(view);
 
         Log.d(GROUPCONTENTFRAGMENT_LOG, "loadManager completed");
@@ -123,7 +178,7 @@ public class GroupContentFragment extends Fragment {
                     String result = data.getStringExtra("result");
                     Log.d(GROUPCONTENTFRAGMENT_LOG, "data is " + result);
 
-                    mManager.setResource(result);
+                    mDataManager.setResource(result);
                     loadDataManager();
                 }
                 break;
@@ -131,7 +186,7 @@ public class GroupContentFragment extends Fragment {
                 if (resultCode == RESULT_OK && mCashID != -1) {
                     Log.d(GROUPCONTENTFRAGMENT_LOG, "deleting group with id " + mCashID);
 
-                    mManager.deleteVerb((int) mCashID);
+                    mDataManager.deleteVerb((int) mCashID);
                     loadDataManager();
 
                     //-1 value of mCashID is used to be a token of default & not used id
@@ -146,4 +201,11 @@ public class GroupContentFragment extends Fragment {
         }
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mAsyncTaskLoader.cancelLoad();
+    }
 }

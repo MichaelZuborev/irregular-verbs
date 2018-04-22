@@ -68,6 +68,11 @@ public class GroupContentAdapter extends BaseAdapter {
         secondFormVerb.setText(getItemArray().get(position).getSecondForm());
         thirdFormVerb.setText(getItemArray().get(position).getThirdForm());
 
+        mainVerb.setTextColor(resultView.getResources().getColor(R.color.BLACK_SOFT));
+        firstFormVerb.setTextColor(resultView.getResources().getColor(R.color.BLACK_SOFT));
+        secondFormVerb.setTextColor(resultView.getResources().getColor(R.color.BLACK_SOFT));
+        thirdFormVerb.setTextColor(resultView.getResources().getColor(R.color.BLACK_SOFT));
+
         Log.d(GROUP_CONTENT_ADAPTER, "text has been set");
 
         return resultView;
