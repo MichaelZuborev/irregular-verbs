@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IrregularVerbsNew</string>
+    <string name="app_name">Irregular Verbs</string>
     <string name="quiz_btn">Start test</string>
     <string name="groups_btn">Groups</string>
     <string name="verbs_btn">All verbs</string>
