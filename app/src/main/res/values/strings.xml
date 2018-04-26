@@ -14,4 +14,5 @@
     <string name="test_is_finished">Test is finished!</string>
     <string name="finish">Finish</string>
     <string name="do_you_want_to_delete_verb">Do you want to delete verb?</string>
+    <string name="found_mistake">Found a mistake?</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.kek.irregularverbs.mainmenu;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,17 @@ public class MainMenuActivity extends AppCompatActivity {
                 intent = new Intent(this, VerbListActivity.class);
                 Log.d(MAINMENUACTIVITY_LOG, "Starting " + view.toString());
                 startActivity(intent);
+                break;
+            case R.id.floatingActionButtonMainMenu:
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"michaelzuborev@gmail.com"});
+                i.putExtra(Intent.EXTRA_SUBJECT, "Irregular verbs app");
+                try {
+                    startActivity(Intent.createChooser(i, "Send mail..."));
+                } catch (android.content.ActivityNotFoundException e) {
+                    Log.e(MAINMENUACTIVITY_LOG, "Client not found " + e);
+                }
                 break;
         }
     }
