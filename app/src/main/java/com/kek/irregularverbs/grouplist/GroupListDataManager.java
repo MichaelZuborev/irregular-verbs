@@ -73,6 +73,8 @@ public class GroupListDataManager {
 
     public void loadData() throws IOException {
         try {
+            new DefaultGroupsInitializer(mContext);
+
             FileInputStream fileInStream = mContext.openFileInput("groups.list");
             InputStreamReader inputRead = new InputStreamReader(fileInStream);
             Log.d(GROUP_LIST_MANAGER, "input stream has been successfully created & initialised");
